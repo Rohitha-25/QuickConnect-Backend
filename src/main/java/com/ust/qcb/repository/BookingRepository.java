@@ -10,7 +10,7 @@ import com.ust.qcb.entity.Booking;
 
 @Repository
 public interface BookingRepository extends JpaRepository<Booking, Long>{
-	List<Booking> findByUserId(Long userId);
+	List<Booking> findByUsersId(Long userId);
     List<Booking> findByServiceProviderId(Long providerId);
     List<Booking> findByBookingDate(LocalDate bookingDate);
 }

@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.ust.qcb.entity.Review;
-import com.ust.qcb.entity.User;
+import com.ust.qcb.entity.Users;
 import com.ust.qcb.repository.ReviewRepository;
 import com.ust.qcb.repository.ServiceRepository;
 import com.ust.qcb.repository.UserRepository;
@@ -25,7 +25,7 @@ public class ReviewService {
     private ServiceRepository serviceRepo;
 
     public Review addReview(Long userId, Long serviceId, Review review) {
-        User user = userRepo.findById(userId).orElseThrow();
+        Users user = userRepo.findById(userId).orElseThrow();
         com.ust.qcb.entity.Service service = serviceRepo.findById(serviceId).orElseThrow();
         review.setUser(user);
         review.setService(service);

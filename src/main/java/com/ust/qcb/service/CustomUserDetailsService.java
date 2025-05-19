@@ -7,7 +7,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import com.ust.qcb.entity.ServiceProvider;
-import com.ust.qcb.entity.User;
+import com.ust.qcb.entity.Users;
 import com.ust.qcb.repository.ServiceProviderRepository;
 import com.ust.qcb.repository.UserRepository;
 
@@ -22,7 +22,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 	
 	@Override
     public UserDetails loadUserByUsername(String email) {
-        User user = userRepository.findByEmail(email);
+        Users user = userRepository.findByEmail(email);
 
         if (user != null) {
             return org.springframework.security.core.userdetails.User.builder()

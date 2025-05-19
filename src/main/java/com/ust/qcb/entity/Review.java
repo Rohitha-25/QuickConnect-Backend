@@ -21,7 +21,7 @@ public class Review {
 
     @ManyToOne
     @JoinColumn(name = "user_id")
-    private User user;
+    private Users users;
 
     @ManyToOne
     @JoinColumn(name = "service_id")
@@ -59,12 +59,12 @@ public class Review {
 		this.date = date;
 	}
 
-	public User getUser() {
-		return user;
+	public Users getUser() {
+		return users;
 	}
 
-	public void setUser(User user) {
-		this.user = user;
+	public void setUser(Users users) {
+		this.users = users;
 	}
 
 	public Service getService() {
@@ -75,13 +75,13 @@ public class Review {
 		this.service = service;
 	}
 
-	public Review(Long id, int rating, String comment, LocalDate date, User user, Service service) {
+	public Review(Long id, int rating, String comment, LocalDate date, Users users, Service service) {
 		super();
 		this.id = id;
 		this.rating = rating;
 		this.comment = comment;
 		this.date = date;
-		this.user = user;
+		this.users = users;
 		this.service = service;
 	}
 

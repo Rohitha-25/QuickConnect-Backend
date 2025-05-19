@@ -21,7 +21,7 @@ public class Booking {
 
     @ManyToOne
     @JoinColumn(name = "user_id")
-    private User user;
+    private Users users;
 
     @ManyToOne
     @JoinColumn(name = "service_id")
@@ -63,12 +63,12 @@ public class Booking {
 		this.amount = amount;
 	}
 
-	public User getUser() {
-		return user;
+	public Users getUser() {
+		return users;
 	}
 
-	public void setUser(User user) {
-		this.user = user;
+	public void setUser(Users users) {
+		this.users = users;
 	}
 
 	public Service getService() {
@@ -87,14 +87,14 @@ public class Booking {
 		this.serviceProvider = serviceProvider;
 	}
 
-	public Booking(Long id, LocalDate bookingDate, String status, double amount, User user, Service service,
+	public Booking(Long id, LocalDate bookingDate, String status, double amount, Users users, Service service,
 			ServiceProvider serviceProvider) {
 		super();
 		this.id = id;
 		this.bookingDate = bookingDate;
 		this.status = status;
 		this.amount = amount;
-		this.user = user;
+		this.users = users;
 		this.service = service;
 		this.serviceProvider = serviceProvider;
 	}

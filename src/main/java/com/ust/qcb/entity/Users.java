@@ -15,7 +15,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 
 @Entity
-public class User {
+public class Users {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,11 +30,11 @@ public class User {
     private Role role;
     
     @JsonIgnore
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "users", cascade = CascadeType.ALL)
     private List<Booking> bookings;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "users", cascade = CascadeType.ALL)
     private List<Review> reviews;
 
 	public Long getId() {
@@ -101,7 +101,7 @@ public class User {
 		this.reviews = reviews;
 	}
 
-    public User(Long id, String name, String email, String password, String phone, Role role, List<Booking> bookings,
+    public Users(Long id, String name, String email, String password, String phone, Role role, List<Booking> bookings,
 			List<Review> reviews) {
 		super();
 		this.id = id;
@@ -114,7 +114,7 @@ public class User {
 		this.reviews = reviews;
 	}
 
-	public User() {
+	public Users() {
     	
     }
 }

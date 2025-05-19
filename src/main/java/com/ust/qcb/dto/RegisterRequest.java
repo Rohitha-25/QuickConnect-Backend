@@ -43,8 +43,8 @@ public class RegisterRequest {
     public Role getRole() {
 		return role;
 	}
-	public void setRole(String role) {
-		this.role = Role.valueOf(role.toUpperCase());
+	public void setRole(Role role) {
+		this.role = role;
 	}
 	
 	public RegisterRequest(String name, String email, String password, String phone, Role role) {

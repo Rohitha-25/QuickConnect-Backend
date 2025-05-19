@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.ust.qcb.entity.Booking;
 import com.ust.qcb.entity.ServiceProvider;
-import com.ust.qcb.entity.User;
+import com.ust.qcb.entity.Users;
 import com.ust.qcb.repository.BookingRepository;
 import com.ust.qcb.repository.ServiceRepository;
 import com.ust.qcb.repository.UserRepository;
@@ -26,7 +26,7 @@ public class BookingService {
     private ServiceRepository serviceRepo;
 
     public Booking createBooking(Long userId, Long serviceId) {
-        Optional<User> user = userRepo.findById(userId);
+        Optional<Users> user = userRepo.findById(userId);
         Optional<com.ust.qcb.entity.Service> service = serviceRepo.findById(serviceId);
 
         if (user.isEmpty() || service.isEmpty()) {
@@ -47,7 +47,7 @@ public class BookingService {
     }
 
     public List<Booking> getBookingsByUser(Long userId) {
-        return bookingRepo.findByUserId(userId);
+        return bookingRepo.findByUsersId(userId);
     }
 
     public List<Booking> getBookingsByProvider(Long providerId) {

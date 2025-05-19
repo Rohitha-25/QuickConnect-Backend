@@ -10,7 +10,7 @@ import com.ust.qcb.dto.AuthenticationRequest;
 import com.ust.qcb.dto.AuthenticationResponse;
 import com.ust.qcb.dto.RegisterRequest;
 import com.ust.qcb.entity.ServiceProvider;
-import com.ust.qcb.entity.User;
+import com.ust.qcb.entity.Users;
 import com.ust.qcb.repository.ServiceProviderRepository;
 import com.ust.qcb.repository.UserRepository;
 import com.ust.qcb.security.JwtUtil;
@@ -34,7 +34,7 @@ public class AuthService {
 	private JwtUtil jwtUtil;
 
 	public String registerUser(RegisterRequest request) {
-    	User user = new User();
+    	Users user = new Users();
         user.setName(request.getName());
         user.setEmail(request.getEmail());
         user.setPassword(passwordEncoder.encode(request.getPassword()));
@@ -56,29 +56,26 @@ public class AuthService {
     }
 
     public AuthenticationResponse authenticate(AuthenticationRequest request) {
-    	
-    	User user = userRepository.findByEmail(request.getEmail());
-
-        if (user == null) {
-            ServiceProvider serviceProvider = serviceProviderRepository.findByEmail(request.getEmail());
-            
-            if (serviceProvider == null) {
+        Users user = userRepository.findByEmail(request.getEmail());
+        if (user != null) {
+            if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
                 throw new RuntimeException("Invalid email or password");
             }
-            
-            authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword())
-            );
-            
-            String token = jwtUtil.generateToken(request.getEmail());
+
+            String token = jwtUtil.generateToken(user.getEmail());
+            return new AuthenticationResponse(token, "User login successful!");
+        }
+
+        ServiceProvider serviceProvider = serviceProviderRepository.findByEmail(request.getEmail());
+        if (serviceProvider != null) {
+            if (!passwordEncoder.matches(request.getPassword(), serviceProvider.getPassword())) {
+                throw new RuntimeException("Invalid email or password");
+            }
+
+            String token = jwtUtil.generateToken(serviceProvider.getEmail());
             return new AuthenticationResponse(token, "Service Provider login successful!");
         }
-    	
-        authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword())
-        );
-        
-        String token = jwtUtil.generateToken(request.getEmail());
-        return new AuthenticationResponse(token, "User login successful!");
+
+        throw new RuntimeException("Invalid email or password");
     }
 }

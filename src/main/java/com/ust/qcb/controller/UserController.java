@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ust.qcb.entity.User;
+import com.ust.qcb.entity.Users;
 import com.ust.qcb.service.UserService;
 
 @RestController
@@ -19,12 +19,12 @@ public class UserController {
     private UserService userService;
 
     @GetMapping
-    public List<User> getAllUsers() {
+    public List<Users> getAllUsers() {
         return userService.getAllUsers();
     }
 
     @GetMapping("/get/{id}")
-    public User getUserById(@PathVariable Long id) {
+    public Users getUserById(@PathVariable Long id) {
         return userService.getUserById(id);
     }
 
