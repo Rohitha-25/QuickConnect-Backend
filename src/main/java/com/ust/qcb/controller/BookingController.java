@@ -2,11 +2,16 @@ package com.ust.qcb.controller;
 
 import com.ust.qcb.entity.Booking;
 import com.ust.qcb.service.BookingService;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/bookings")
@@ -18,6 +23,25 @@ public class BookingController {
     @PostMapping("/book/{userId}/{serviceId}")
     public Booking createBooking(@PathVariable Long userId, @PathVariable Long serviceId) {
         return bookingService.createBooking(userId, serviceId);
+    }
+
+    // ✅ NEW: Confirms the slot date and time chosen by the user
+    // Body: { "slotDate": "2026-07-01", "slotTime": "09:00" }
+    @PostMapping("/confirm-slot/{bookingId}")
+    public ResponseEntity<?> confirmSlot(@PathVariable Long bookingId, @RequestBody Map<String, String> body) {
+        try {
+            LocalDate slotDate = LocalDate.parse(body.get("slotDate"));
+            LocalTime slotTime = LocalTime.parse(body.get("slotTime"));
+            Booking booking = bookingService.confirmSlot(bookingId, slotDate, slotTime);
+            return ResponseEntity.ok(booking);
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("message", e.getMessage()));
+        }
+    }
+
+    @GetMapping("/get/{id}")
+    public Booking getBookingById(@PathVariable Long id) {
+        return bookingService.getBookingById(id);
     }
 
     @GetMapping("/user/{userId}")
@@ -32,13 +56,7 @@ public class BookingController {
 
     @GetMapping("/date/{date}")
     public List<Booking> getBookingsByDate(@PathVariable String date) {
-        LocalDate bookingDate = LocalDate.parse(date); // Format: yyyy-mm-dd
-        return bookingService.getBookingsByDate(bookingDate);
-    }
-    
-    @GetMapping("/get/{id}")
-    public Booking getBookingById(@PathVariable Long id) {
-        return bookingService.getBookingById(id);
+        return bookingService.getBookingsByDate(LocalDate.parse(date));
     }
 
     @DeleteMapping("/delete/{id}")

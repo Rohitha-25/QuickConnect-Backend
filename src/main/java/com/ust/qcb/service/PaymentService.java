@@ -2,6 +2,7 @@ package com.ust.qcb.service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -28,7 +29,20 @@ public class PaymentService {
         payment.setStatus("SUCCESS");
         payment.setAmount(booking.getAmount());
 
+        // ✅ NEW: Once payment succeeds, generate a 6-digit verification OTP
+        // and attach it to the booking. The user will share this with their
+        // service provider on-site to confirm their identity.
+        String otp = generateOtp();
+        booking.setServiceOtp(otp);
+        booking.setStatus("PAID");
+        bookingRepo.save(booking);
+
         return paymentRepo.save(payment);
+    }
+
+    private String generateOtp() {
+        int otp = 100000 + new Random().nextInt(900000);
+        return String.valueOf(otp);
     }
 
     public Payment getPaymentByBooking(Long bookingId) {

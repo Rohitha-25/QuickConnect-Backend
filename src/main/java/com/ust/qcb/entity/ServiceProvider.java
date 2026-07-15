@@ -22,7 +22,11 @@ public class ServiceProvider {
 
     private String name;
     private String email;
+
+    // ✅ FIX: Never serialize password back to the client in any API response
+    @JsonIgnore
     private String password;
+
     private String phone;
     
     @Enumerated(EnumType.STRING)

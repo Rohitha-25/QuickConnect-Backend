@@ -63,7 +63,8 @@ public class AuthService {
             }
 
             String token = jwtUtil.generateToken(user.getEmail());
-            return new AuthenticationResponse(token, "User login successful!");
+            // ✅ FIX: Pass userId so frontend can store it for booking/review calls
+            return new AuthenticationResponse(token, "User login successful!", user.getId());
         }
 
         ServiceProvider serviceProvider = serviceProviderRepository.findByEmail(request.getEmail());
@@ -73,7 +74,8 @@ public class AuthService {
             }
 
             String token = jwtUtil.generateToken(serviceProvider.getEmail());
-            return new AuthenticationResponse(token, "Service Provider login successful!");
+            // ✅ FIX: Pass provider's id too
+            return new AuthenticationResponse(token, "Service Provider login successful!", serviceProvider.getId());
         }
 
         throw new RuntimeException("Invalid email or password");
