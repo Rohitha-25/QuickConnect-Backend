@@ -3,22 +3,17 @@ package com.ust.qcb.dto;
 public class AuthenticationResponse {
 	private String token;
     private String message;
-    // ✅ FIX: Added userId so frontend can use it for booking/review endpoints
     private Long userId;
+    private String userName;
 
-    public AuthenticationResponse() {
-    }
-
-    public AuthenticationResponse(String token, String message) {
-        this.token = token;
-        this.message = message;
-    }
-
-    // ✅ FIX: New constructor that also accepts userId
-    public AuthenticationResponse(String token, String message, Long userId) {
+    public AuthenticationResponse(String token, String message, Long userId, String userName) {
         this.token = token;
         this.message = message;
         this.userId = userId;
+        this.userName = userName;
+    }
+
+    public AuthenticationResponse() {
     }
 
     public String getToken() {
@@ -43,5 +38,13 @@ public class AuthenticationResponse {
 
     public void setUserId(Long userId) {
         this.userId = userId;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 }

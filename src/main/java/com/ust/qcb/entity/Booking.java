@@ -20,13 +20,9 @@ public class Booking {
     private String status;
     private double amount;
 
-    // ✅ NEW: Date the user wants the provider to come
     private LocalDate slotDate;
-
-    // ✅ NEW: Time slot picked (e.g. 09:00, 11:00, 14:00)
     private LocalTime slotTime;
 
-    // ✅ NEW: OTP reserved for provider verification in the production version
     private String serviceOtp;
 
     @ManyToOne
