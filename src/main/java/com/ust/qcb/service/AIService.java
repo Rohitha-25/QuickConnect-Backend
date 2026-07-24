@@ -33,9 +33,6 @@ public class AIService {
     private static final Pattern RECOMMEND_PATTERN = Pattern.compile("RECOMMEND:\\s*(.+)", Pattern.CASE_INSENSITIVE);
 
     public AIChatResponse chat(AIChatRequest request) {
-        // ✅ Build the system prompt dynamically from REAL services in the DB —
-        // this means the AI can never recommend a service that doesn't exist,
-        // and automatically stays up to date if you add/remove services.
         String serviceList = serviceRepository.findAll().stream()
                 .map(s -> "- " + s.getServiceName() + " (" + s.getCategory() + "): " + s.getDescription())
                 .collect(Collectors.joining("\n"));

@@ -48,8 +48,6 @@ public class BookingService {
         return bookingRepo.save(booking);
     }
 
-    // ✅ NEW: Saves the chosen slot date + time, generates a backend OTP
-    // (reserved for production provider verification), sets status to SLOT_CONFIRMED
     public Booking confirmSlot(Long bookingId, LocalDate slotDate, LocalTime slotTime) {
         Booking booking = bookingRepo.findById(bookingId)
                 .orElseThrow(() -> new RuntimeException("Booking not found"));
@@ -58,8 +56,6 @@ public class BookingService {
         booking.setSlotTime(slotTime);
         booking.setStatus("SLOT_CONFIRMED");
 
-        // Generate OTP now — stored silently for provider verification
-        // in the production version of this app
         booking.setServiceOtp(String.valueOf(100000 + new Random().nextInt(900000)));
 
         return bookingRepo.save(booking);

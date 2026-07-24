@@ -25,6 +25,5 @@ public class AuthenticationRequest {
 	}
     
     public AuthenticationRequest() {
-    	
     }
 }

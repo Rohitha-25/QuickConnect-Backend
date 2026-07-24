@@ -50,24 +50,83 @@ public class Booking {
         this.serviceProvider = serviceProvider;
     }
 
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
-    public LocalDate getBookingDate() { return bookingDate; }
-    public void setBookingDate(LocalDate bookingDate) { this.bookingDate = bookingDate; }
-    public String getStatus() { return status; }
-    public void setStatus(String status) { this.status = status; }
-    public double getAmount() { return amount; }
-    public void setAmount(double amount) { this.amount = amount; }
-    public LocalDate getSlotDate() { return slotDate; }
-    public void setSlotDate(LocalDate slotDate) { this.slotDate = slotDate; }
-    public LocalTime getSlotTime() { return slotTime; }
-    public void setSlotTime(LocalTime slotTime) { this.slotTime = slotTime; }
-    public String getServiceOtp() { return serviceOtp; }
-    public void setServiceOtp(String serviceOtp) { this.serviceOtp = serviceOtp; }
-    public Users getUsers() { return users; }
-    public void setUsers(Users users) { this.users = users; }
-    public Service getService() { return service; }
-    public void setService(Service service) { this.service = service; }
-    public ServiceProvider getServiceProvider() { return serviceProvider; }
-    public void setServiceProvider(ServiceProvider serviceProvider) { this.serviceProvider = serviceProvider; }
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public LocalDate getBookingDate() {
+        return bookingDate;
+    }
+
+    public void setBookingDate(LocalDate bookingDate) {
+        this.bookingDate = bookingDate;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public double getAmount() {
+        return amount;
+    }
+
+    public void setAmount(double amount) {
+        this.amount = amount;
+    }
+
+    public LocalDate getSlotDate() {
+        return slotDate;
+    }
+
+    public void setSlotDate(LocalDate slotDate) {
+        this.slotDate = slotDate;
+    }
+
+    public LocalTime getSlotTime() {
+        return slotTime;
+    }
+
+    public void setSlotTime(LocalTime slotTime) {
+        this.slotTime = slotTime;
+    }
+
+    public String getServiceOtp() {
+        return serviceOtp;
+    }
+
+    public void setServiceOtp(String serviceOtp) {
+        this.serviceOtp = serviceOtp;
+    }
+
+    public Users getUsers() {
+        return users;
+    }
+
+    public void setUsers(Users users) {
+        this.users = users;
+    }
+
+    public Service getService() {
+        return service;
+    }
+
+    public void setService(Service service) {
+        this.service = service;
+    }
+
+    public ServiceProvider getServiceProvider() {
+        return serviceProvider;
+    }
+
+    public void setServiceProvider(ServiceProvider serviceProvider) {
+        this.serviceProvider = serviceProvider;
+    }
 }

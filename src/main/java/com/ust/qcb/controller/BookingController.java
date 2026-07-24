@@ -25,8 +25,6 @@ public class BookingController {
         return bookingService.createBooking(userId, serviceId);
     }
 
-    // ✅ NEW: Confirms the slot date and time chosen by the user
-    // Body: { "slotDate": "2026-07-01", "slotTime": "09:00" }
     @PostMapping("/confirm-slot/{bookingId}")
     public ResponseEntity<?> confirmSlot(@PathVariable Long bookingId, @RequestBody Map<String, String> body) {
         try {

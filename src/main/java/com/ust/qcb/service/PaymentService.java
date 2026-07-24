@@ -29,9 +29,6 @@ public class PaymentService {
         payment.setStatus("SUCCESS");
         payment.setAmount(booking.getAmount());
 
-        // ✅ NEW: Once payment succeeds, generate a 6-digit verification OTP
-        // and attach it to the booking. The user will share this with their
-        // service provider on-site to confirm their identity.
         String otp = generateOtp();
         booking.setServiceOtp(otp);
         booking.setStatus("PAID");
