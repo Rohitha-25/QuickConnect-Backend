@@ -24,4 +24,9 @@ public class ReviewController {
     public List<Review> getReviewsByService(@PathVariable Long serviceId) {
         return reviewService.getReviewsForService(serviceId);
     }
+
+    @GetMapping("/exists/{userId}/{serviceId}")
+    public boolean hasReviewedService(@PathVariable Long userId, @PathVariable Long serviceId) {
+        return reviewService.hasReviewedService(userId, serviceId);
+    }
 }

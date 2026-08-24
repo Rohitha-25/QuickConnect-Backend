@@ -36,4 +36,8 @@ public class ReviewService {
     public List<Review> getReviewsForService(Long serviceId) {
         return reviewRepo.findByServiceId(serviceId);
     }
+
+    public boolean hasReviewedService(Long userId, Long serviceId) {
+        return reviewRepo.existsByUsersIdAndServiceId(userId, serviceId);
+    }
 }

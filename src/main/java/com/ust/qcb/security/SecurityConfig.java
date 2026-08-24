@@ -36,6 +36,9 @@ public class SecurityConfig {
 
                         .requestMatchers("/api/users/**",
                                 "/api/providers/**").hasRole("USER")
+                        .requestMatchers("/api/users/update/**",
+                                "/api/users/change-password/**").hasRole("USER")
+                        .requestMatchers("/api/users/delete/**").hasRole("USER")
                         .requestMatchers("/api/providers/get/**",
                                 "/api/providers/delete/**").hasRole("USER")
                         .requestMatchers("/api/services/provider/**").hasRole("USER")
@@ -47,11 +50,12 @@ public class SecurityConfig {
                         .requestMatchers("/api/payments/pay/**",
                                 "/api/payments/booking/**").hasRole("USER")
                         .requestMatchers("/api/reviews/add/**").hasRole("USER")
+                        .requestMatchers("/api/reviews/exists/**").hasRole("USER")
                         .requestMatchers("/api/ai/chat").hasRole("USER")
                         .requestMatchers("/api/providers/**").hasRole("PROVIDER")
                         .requestMatchers("/api/services/add/**").hasRole("PROVIDER")
-                        .requestMatchers("/api/bookings/user/**",
-                                "/api/bookings/provider/**").hasRole("PROVIDER")
+                        .requestMatchers("/api/bookings/user/**").hasRole("USER")
+                        .requestMatchers("/api/bookings/provider/**").hasRole("PROVIDER")
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);

@@ -26,10 +26,10 @@ public class AIService {
     @Autowired
     private ServiceRepository serviceRepository;
 
-    @Value("${anthropic.api.key}")
+    @Value("${gemini.api.key}")
     private String apiKey;
 
-    private static final String ANTHROPIC_URL = "https://api.anthropic.com/v1/messages";
+    private static final String GEMINI_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=";
     private static final Pattern RECOMMEND_PATTERN = Pattern.compile("RECOMMEND:\\s*(.+)", Pattern.CASE_INSENSITIVE);
 
     public AIChatResponse chat(AIChatRequest request) {
@@ -37,54 +37,63 @@ public class AIService {
                 .map(s -> "- " + s.getServiceName() + " (" + s.getCategory() + "): " + s.getDescription())
                 .collect(Collectors.joining("\n"));
 
-        String systemPrompt = "You are a helpful assistant for QuickConnect, a home services platform.\n"
-                + "Your job is to understand what problem the user has and recommend the most appropriate "
-                + "service from this exact list (never invent a service that isn't listed):\n\n"
+        String systemPrompt = "You are a helpful assistant for QuickConnect, a home services platform. "
+                + "Understand the user's problem and recommend the most appropriate service from this list:\n\n"
                 + serviceList + "\n\n"
-                + "Respond naturally and briefly (2-3 sentences max). "
-                + "If you can confidently match a service, end your reply on a new line with exactly:\n"
-                + "RECOMMEND: <exact service name from the list>\n"
-                + "If you cannot determine a clear match, ask one short clarifying question instead, "
-                + "and do not include a RECOMMEND line.";
+                + "Respond naturally in 2-3 sentences. "
+                + "If you can confidently match a service, end with:\nRECOMMEND: <exact service name>\n"
+                + "If unsure, ask one clarifying question without a RECOMMEND line.";
 
         RestTemplate restTemplate = new RestTemplate();
 
         HttpHeaders headers = new HttpHeaders();
-        headers.set("x-api-key", apiKey);
-        headers.set("anthropic-version", "2023-06-01");
         headers.setContentType(MediaType.APPLICATION_JSON);
 
-        List<Map<String, String>> messages = new ArrayList<>();
+        List<Map<String, Object>> contents = new ArrayList<>();
+
+        Map<String, Object> systemMsg = new HashMap<>();
+        systemMsg.put("role", "user");
+        systemMsg.put("parts", List.of(Map.of("text", systemPrompt)));
+        contents.add(systemMsg);
+
+        Map<String, Object> modelAck = new HashMap<>();
+        modelAck.put("role", "model");
+        modelAck.put("parts", List.of(Map.of("text", "Understood! I'll help users find the right service.")));
+        contents.add(modelAck);
+
         if (request.getHistory() != null) {
             for (AIChatRequest.AIChatMessage m : request.getHistory()) {
-                if ("user".equalsIgnoreCase(m.getRole())) {
-                    Map<String, String> msg = new HashMap<>();
-                    msg.put("role", "user");
-                    msg.put("content", m.getText());
-                    messages.add(msg);
-                }
+                String role = "ai".equalsIgnoreCase(m.getRole()) ? "model" : "user";
+                Map<String, Object> msg = new HashMap<>();
+                msg.put("role", role);
+                msg.put("parts", List.of(Map.of("text", m.getText())));
+                contents.add(msg);
             }
         }
-        Map<String, String> currentMsg = new HashMap<>();
+
+        Map<String, Object> currentMsg = new HashMap<>();
         currentMsg.put("role", "user");
-        currentMsg.put("content", request.getMessage());
-        messages.add(currentMsg);
+        currentMsg.put("parts", List.of(Map.of("text", request.getMessage())));
+        contents.add(currentMsg);
 
         Map<String, Object> body = new HashMap<>();
-        body.put("model", "claude-sonnet-4-6");
-        body.put("max_tokens", 500);
-        body.put("system", systemPrompt);
-        body.put("messages", messages);
+        body.put("contents", contents);
 
         HttpEntity<Map<String, Object>> entity = new HttpEntity<>(body, headers);
 
         try {
             @SuppressWarnings("unchecked")
-            Map<String, Object> response = restTemplate.postForObject(ANTHROPIC_URL, entity, Map.class);
+            Map<String, Object> response = restTemplate.postForObject(
+                    GEMINI_URL + apiKey, entity, Map.class
+            );
 
             @SuppressWarnings("unchecked")
-            List<Map<String, Object>> content = (List<Map<String, Object>>) response.get("content");
-            String fullText = content.isEmpty() ? "" : (String) content.get(0).get("text");
+            List<Map<String, Object>> candidates = (List<Map<String, Object>>) response.get("candidates");
+            @SuppressWarnings("unchecked")
+            Map<String, Object> content = (Map<String, Object>) candidates.get(0).get("content");
+            @SuppressWarnings("unchecked")
+            List<Map<String, Object>> parts = (List<Map<String, Object>>) content.get("parts");
+            String fullText = (String) parts.get(0).get("text");
 
             Matcher matcher = RECOMMEND_PATTERN.matcher(fullText);
             String recommended = null;
@@ -98,9 +107,10 @@ public class AIService {
             return new AIChatResponse(displayText, recommended);
 
         } catch (Exception e) {
+            e.printStackTrace();
             return new AIChatResponse(
-                "Sorry, I'm having trouble right now. Please browse our services directly or try again shortly.",
-                null
+                    "Sorry, I'm having trouble right now. Please browse our services directly or try again shortly.",
+                    null
             );
         }
     }

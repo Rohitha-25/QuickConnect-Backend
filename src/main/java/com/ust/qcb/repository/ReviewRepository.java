@@ -10,4 +10,5 @@ import com.ust.qcb.entity.Review;
 @Repository
 public interface ReviewRepository extends JpaRepository<Review, Long> {
     List<Review> findByServiceId(Long serviceId);
+    boolean existsByUsersIdAndServiceId(Long userId, Long serviceId);
 }

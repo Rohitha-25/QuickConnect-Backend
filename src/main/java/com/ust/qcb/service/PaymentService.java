@@ -26,12 +26,19 @@ public class PaymentService {
 
         payment.setBooking(booking);
         payment.setPaymentDateTime(LocalDateTime.now());
-        payment.setStatus("SUCCESS");
         payment.setAmount(booking.getAmount());
 
-        String otp = generateOtp();
-        booking.setServiceOtp(otp);
-        booking.setStatus("PAID");
+        if ("CASH".equalsIgnoreCase(payment.getPaymentMode())) {
+            payment.setStatus("PENDING_PAYMENT");
+            booking.setStatus("PENDING_PAYMENT");
+        } else {
+            payment.setStatus("SUCCESS");
+            booking.setStatus("PAID");
+
+            String otp = generateOtp();
+            booking.setServiceOtp(otp);
+        }
+
         bookingRepo.save(booking);
 
         return paymentRepo.save(payment);

@@ -2,12 +2,8 @@ package com.ust.qcb.entity;
 
 import java.time.LocalDate;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.*;
 
 @Entity
 public class Review {
@@ -19,6 +15,7 @@ public class Review {
     private String comment;
     private LocalDate date;
 
+	@JsonIgnore
     @ManyToOne
     @JoinColumn(name = "user_id")
     private Users users;
@@ -26,6 +23,11 @@ public class Review {
     @ManyToOne
     @JoinColumn(name = "service_id")
     private Service service;
+
+	@Transient
+	public String getUserName() {
+		return users != null ? users.getName() : "Anonymous";
+	}
     
     public Long getId() {
 		return id;
