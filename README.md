@@ -158,3 +158,6 @@ mvnw.cmd spring-boot:run
 macOS / Linux:
 ./mvnw spring-boot:run
 ```
+
+#### Related Repository
+https://github.com/Rohitha-25/QuickConnect-Frontend
