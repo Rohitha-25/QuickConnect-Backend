@@ -1,4 +1,4 @@
-## 👨‍🔧 QuickConnect – Backend
+## 👨‍🔧 QuickConnect – Home Services Application – Backend
 
 ### Overview
 QuickConnect is a full-stack service-booking platform. This repository contains the Spring Boot backend responsible for authentication, users and service providers, services, bookings, payments, reviews and role-based access control.
